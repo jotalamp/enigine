@@ -1,5 +1,8 @@
 #include "culling_manager.h"
+
+if defined(__linux__)
 #include <algorithm>
+#endif
 
 class MyOverlapCallback : public btBroadphaseAabbCallback
 {
