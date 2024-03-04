@@ -60,6 +60,7 @@ private:
     ALCdevice *openALDevice;
     ALCcontext *openALContext;
     ALCboolean contextMadeCurrent;
+    /*
     // Functions
     bool check_al_errors(const std::string &filename, const std::uint_fast32_t line);
     template <typename alFunction, typename... Params>
@@ -90,5 +91,6 @@ private:
                      ALCdevice *device,
                      Params... params)
         -> typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, bool>;
+        */
 };
 #endif /* sound_engine */
