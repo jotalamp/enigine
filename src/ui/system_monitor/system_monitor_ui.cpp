@@ -11,5 +11,7 @@ void SystemMonitorUI::render()
     else
         ImGui::Text("Mouse Position: <invalid>");
     ImGui::Text("FPS: %.1f", io.Framerate);
+    #if defined(__APPLE__)
     ImGui::Text("RAM: %.2f MB", static_cast<float>(m_info->resident_size) / (1024.0f * 1024.0f));
+    #endif
 }

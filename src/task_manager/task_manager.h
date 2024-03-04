@@ -1,10 +1,14 @@
 #ifndef task_manager_hpp
 #define task_manager_hpp
 
+#if defined(__linux__)
+#include <functional>
+#endif
+
 #include <iostream>
+#include <stack>
 #include <string>
 #include <vector>
-#include <stack>
 
 #include "../character_task/character_task.h"
 

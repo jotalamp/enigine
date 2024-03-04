@@ -1,7 +1,9 @@
 #ifndef particle_ui_hpp
 #define particle_ui_hpp
 
+#if defined(__APPLE__)
 #include <mach/mach.h>
+#endif
 
 #include "../base_ui.h"
 #include "../../particle_engine/particle_engine.h"

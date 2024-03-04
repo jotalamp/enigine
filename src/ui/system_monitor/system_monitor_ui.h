@@ -1,9 +1,13 @@
 #ifndef system_monitor_ui_hpp
 #define system_monitor_ui_hpp
 
-#include <mach/mach.h>
-
 #include "../base_ui.h"
+
+#if defined(__APPLE__)
+#include <mach/mach.h>
+#else
+struct task_basic_info;
+#endif
 
 class SystemMonitorUI : public BaseUI
 {

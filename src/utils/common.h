@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <mach/mach.h>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -15,6 +14,7 @@
 #include <unistd.h>
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
+#include <mach/mach.h>
 #endif
 
 class CommonUtil
@@ -38,6 +38,7 @@ public:
         std::cout << "started_at: " << dateTime << std::endl;
     }
 
+#if defined(__APPLE__)
     // TODO: support other platforms than macOS
     static inline void refreshSystemMonitor(task_basic_info &t_info)
     {
@@ -47,6 +48,7 @@ public:
                   TASK_BASIC_INFO, (task_info_t)&t_info,
                   &t_info_count);
     }
+#endif
 
     static inline float snappedClamp(float value, float min, float max, float snapLength)
     {
