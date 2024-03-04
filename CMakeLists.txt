@@ -4,15 +4,15 @@ project(enigine CXX)
 # TODO: 
 # Define the list of library names
 set(config_list
-    "glfw3-config"
-    "glew-config"
+    #"glfw3-config"
+    #"glew-config"
     "glm-config"
     "imgui-config"
     "assimp-config"
-    "OpenALconfig"
-    "Bulletconfig"
-    "SndFileconfig"
-    "Boostconfig"
+    "OpenALConfig"
+    "BulletConfig"
+    "SndFileConfig"
+    "BoostConfig"
     "Eigen3Config"
 )
 
