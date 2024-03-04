@@ -345,5 +345,5 @@ void SoundEngine::setListenerPosition(const float x, const float y, const float 
 
 void SoundEngine::setListenerOrientation(const std::vector<float> *orientation)
 {
-    alCall(alListenerfv, AL_ORIENTATION, orientation->data());
+    //alCall(alListenerfv, AL_ORIENTATION, orientation->data());
 }
