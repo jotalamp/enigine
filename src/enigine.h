@@ -63,7 +63,9 @@ public:
     InputManager *inputManager;
 
     GLFWwindow *window;
+#if defined(__APPLE__)
     task_basic_info t_info;
+#endif
     float deltaTime;
 
     Camera *mainCamera;

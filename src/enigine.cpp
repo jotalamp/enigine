@@ -149,13 +149,17 @@ int Enigine::init()
 
     // UI
     rootUI = new RootUI();
-    systemMonitorUI = new SystemMonitorUI(&t_info);
+#if defined(__APPLE__)
+     systemMonitorUI = new SystemMonitorUI(&t_info);
+#endif
     shadowmapUI = new ShadowmapUI(renderManager->m_shadowManager, renderManager->m_shadowmapManager);
     cameraUI = new CameraUI(mainCamera);
     resourceUI = new ResourceUI(resourceManager);
     renderUI = new RenderUI(inputManager, renderManager, resourceManager);
     physicsWorldUI = new PhysicsWorldUI(physicsWorld, debugDrawer);
+#if defined(__APPLE__)
     rootUI->m_uiList.push_back(systemMonitorUI);
+#endif
     rootUI->m_uiList.push_back(shadowmapUI);
     rootUI->m_uiList.push_back(cameraUI);
     rootUI->m_uiList.push_back(resourceUI);
@@ -172,7 +176,9 @@ void Enigine::start()
     while (!glfwWindowShouldClose(window))
     {
         // System monitor
+#if defined(__APPLE__)
         CommonUtil::refreshSystemMonitor(t_info);
+#endif
 
         // Calculate deltaTime
         float currentFrame = (float)glfwGetTime();
