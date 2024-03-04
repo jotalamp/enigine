@@ -437,7 +437,8 @@ GL3W_API GL3WglProc imgl3wGetProcAddress(const char *proc);
 
 /* gl3w internal state */
 union GL3WProcs {
-    GL3WglProc ptr[53];
+    //GL3WglProc ptr[53];
+    GL3WglProc ptr[54];
     struct {
         PFNGLACTIVETEXTUREPROC           ActiveTexture;
         PFNGLATTACHSHADERPROC            AttachShader;
@@ -746,6 +747,7 @@ GL3W_API union GL3WProcs imgl3wProcs;
 
 static void load_procs(GL3WGetProcAddressProc proc)
 {
+    static_assert(ARRAY_SIZE(proc_names) == ARRAY_SIZE(GL3WProcs::ptr));
     size_t i;
     for (i = 0; i < ARRAY_SIZE(proc_names); i++)
         imgl3wProcs.ptr[i] = proc(proc_names[i]);

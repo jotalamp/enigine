@@ -262,7 +262,12 @@ Material *Model::loadMaterial(aiMaterial *material)
         // TODO: enum instead of direct string?
         if (propertyName == "$clr.diffuse")
         {
-            mat.albedo = *reinterpret_cast<glm::vec4 *>(property->mData);
+            //mat.albedo = *reinterpret_cast<glm::vec4 *>(property->mData);
+            if (property->mDataLength == 12) {
+                mat.albedo = glm::vec4(*reinterpret_cast<glm::vec3 *>(property->mData), 0);
+            } else {
+                mat.albedo = *reinterpret_cast<glm::vec4 *>(property->mData);
+            }
         }
         else if (propertyName == "$mat.roughnessFactor")
         {
@@ -282,7 +287,12 @@ Material *Model::loadMaterial(aiMaterial *material)
         }
         else if (propertyName == "$clr.emissive")
         {
-            mat.emissiveColor = *reinterpret_cast<glm::vec4 *>(property->mData);
+            //mat.emissiveColor = *reinterpret_cast<glm::vec4 *>(property->mData);
+            if (property->mDataLength == 12) {
+                mat.emissiveColor = glm::vec4(*reinterpret_cast<glm::vec3 *>(property->mData), 0);
+            } else {
+                mat.emissiveColor = *reinterpret_cast<glm::vec4 *>(property->mData);
+            }
         }
         // TODO: update to assimp 5.3.1
         else if (propertyName == "$mat.emissiveIntensity")
