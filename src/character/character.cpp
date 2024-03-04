@@ -641,7 +641,8 @@ void Character::activateRagdoll()
 
 void Character::applyImpulseFullRagdoll(glm::vec3 impulse)
 {
-    btVector3 imp = BulletGLM::getBulletVec3(impulse * (1.f / BODYPART_COUNT));
+    //btVector3 imp = BulletGLM::getBulletVec3(impulse * (1.f / BODYPART_COUNT));
+    btVector3 imp = BulletGLM::getBulletVec3(impulse * (1.f / static_cast<float>(BODYPART_COUNT)));
     for (int i = 0; i < BODYPART_COUNT; i++)
     {
         btRigidBody *rb = m_ragdoll->m_bodies[i];

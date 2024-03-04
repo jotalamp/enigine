@@ -28,8 +28,7 @@ fi
 
 pushd $BUILD_DIR
 
-#conan install .. --build=missing
-conan install .. -s compiler.libcxx=libstdc++11 # --build=missing
+conan install .. --build=missing
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
