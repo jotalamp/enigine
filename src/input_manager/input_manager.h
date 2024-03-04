@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #if defined(__linux__)
-#include <algorithm>
+#include <functional>
 #endif
 
 class InputManager
