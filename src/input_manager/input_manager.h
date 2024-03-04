@@ -2,8 +2,11 @@
 #define input_manager_hpp
 
 #include <vector>
-#include <functional>
 #include <GLFW/glfw3.h>
+
+#if defined(__linux__)
+#include <algorithm>
+#endif
 
 class InputManager
 {
