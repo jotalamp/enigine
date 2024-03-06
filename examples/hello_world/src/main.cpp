@@ -51,7 +51,7 @@ int main()
     // vehicle
     Models models;
     models.carBody = resourceManager->getModel("assets/models/cylinder.obj");
-    models.wheelBase = resourceManager->getModel("assets/models/eim.obj");
+    models.wheelBase = resourceManager->getModel("assets/models/rim.obj");
     models.doorFront = resourceManager->getModel("assets/models/cylinder.obj");
     models.smokeParticleModel = resourceManager->getModel("assets/models/cylinder.obj");
 
