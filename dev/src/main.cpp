@@ -38,6 +38,7 @@ int main()
     // update camera
     mainCamera->position = glm::vec3(-2.f, 0.f, 2.f);
     mainCamera->front = glm::vec3(0.707f, 0.f, -0.707f);
+    mainCamera->setScrollCallback(window);
 
     enigine.start();
 

@@ -78,6 +78,8 @@ public:
     int init();
     void start();
 
+    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+
     // TODO: move
     unsigned int vbo, vao, ebo;
     unsigned int q_vbo, q_vao, q_ebo;

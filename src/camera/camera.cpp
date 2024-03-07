@@ -1,5 +1,12 @@
 #include "camera.h"
 
+static float zoom = 1.5f;
+
+static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    zoom = glm::clamp((float)(zoom + 0.1f * yoffset), 0.5f, 10.0f);
+}
+
 // Constructor with vectors
 Camera::Camera(glm::vec3 position, glm::vec3 worldUp, float near, float far)
     : position(position),
@@ -16,12 +23,19 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(position, position + front, up);
+    if ( movementMode == MovementMode::Linear )
+        return glm::lookAt(position, position + front, up);
+    else
+        return glm::lookAt(position, targetPosition, up);
+
 }
 
 glm::mat4 Camera::getViewMatrix(glm::vec3 worldOrigin)
 {
-    return glm::lookAt(position + worldOrigin, position + worldOrigin + front, up);
+    if ( movementMode == MovementMode::Linear )
+        return glm::lookAt(position + worldOrigin, position + worldOrigin + front, up);
+    else
+        return glm::lookAt(position + worldOrigin, targetPosition + worldOrigin, up);
 }
 
 glm::mat4 Camera::getProjectionMatrix(float width, float height)
@@ -36,6 +50,17 @@ glm::mat4 Camera::getProjectionMatrix(float width, float height)
     {
         return glm::perspective(fov, width / height, m_near, m_far);
     }
+}
+
+void Camera::calculateOrbit()
+{
+    orbitRotation.y = glm::clamp((double)orbitRotation.y, 0.03f * M_PI, 0.97f * M_PI);
+
+    float x = sin(orbitRotation.y) * cos(orbitRotation.x);
+    float y = cos(orbitRotation.y);
+    float z = sin(orbitRotation.y) * sin(orbitRotation.x);
+    position = zoom * glm::vec3(x, y, z);
+    front = glm::normalize(targetPosition - position);
 }
 
 // TODO: EditorCamera
@@ -62,7 +87,7 @@ void Camera::processInput(GLFWwindow *window, float deltaTime)
     // if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     //     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -81,21 +106,41 @@ void Camera::processInput(GLFWwindow *window, float deltaTime)
         processMouseMovement(xoffset, yoffset, true);
     }
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_RELEASE)
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE)
         moving = false;
+
+    calculateOrbit();
 }
 
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
     float velocity = movementSpeed * deltaTime;
-    if (direction == FORWARD)
-        position += front * velocity;
-    if (direction == BACKWARD)
-        position -= front * velocity;
-    if (direction == LEFT)
-        position -= right * velocity;
-    if (direction == RIGHT)
-        position += right * velocity;
+    if ( movementMode == MovementMode::Linear ) 
+    {
+        if (direction == FORWARD)
+            position += front * velocity;
+        if (direction == BACKWARD)
+            position -= front * velocity;
+        if (direction == LEFT)
+            position -= right * velocity;
+        if (direction == RIGHT)
+            position += right * velocity;
+    } 
+    else
+    {
+        velocity *= 0.1f;
+
+        if (direction == FORWARD)
+            orbitRotation.y -= velocity;
+        if (direction == BACKWARD)
+            orbitRotation.y += velocity;
+        if (direction == LEFT)
+            orbitRotation.x += velocity;
+        if (direction == RIGHT)
+            orbitRotation.x -= velocity;
+
+        calculateOrbit();
+    }
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainpitch)
@@ -104,7 +149,7 @@ void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constr
     yoffset *= mouseSensitivity;
 
     // Make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainpitch)
+    if (constrainpitch && movementMode == MovementMode::Linear)
     {
         float dotUp = glm::dot(front, worldUp);
         if (dotUp > 0.9f && yoffset > 0.f)
@@ -117,6 +162,12 @@ void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constr
     front = glm::normalize(_front);
     right = glm::normalize(glm::cross(front, worldUp));
     up = glm::normalize(glm::cross(right, front));
+    
+    if (movementMode == MovementMode::Orbit)
+    {
+        orbitRotation += glm::vec2(xoffset, yoffset);
+        calculateOrbit();
+    }
 }
 
 // TODO: reuse last
@@ -160,4 +211,9 @@ void Camera::updateFrustumPoints(float width, float height)
     frustumPoints[5] = fc + up * far_height - right * far_width;
     frustumPoints[6] = fc + up * far_height + right * far_width;
     frustumPoints[7] = fc - up * far_height + right * far_width;
+}
+
+void Camera::setScrollCallback(GLFWwindow *window)
+{
+    glfwSetScrollCallback(window, scrollCallback); 
 }

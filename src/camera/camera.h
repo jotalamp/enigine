@@ -29,6 +29,12 @@ enum ProjectionMode
     Ortho,
 };
 
+enum MovementMode
+{
+    Linear,
+    Orbit,
+};
+
 class Camera
 {
 public:
@@ -42,6 +48,10 @@ public:
     glm::vec3 right;
     glm::vec3 worldUp;
     ProjectionMode projectionMode = ProjectionMode::Perspective;
+    MovementMode movementMode = MovementMode::Orbit;
+    glm::vec3 targetPosition = glm::vec3(0);
+    glm::vec2 orbitRotation = glm::vec2(glm::half_pi<float>(), glm::half_pi<float>());
+    float orbitZoom = 1.5f;
     glm::vec3 frustumPoints[8];
     float m_near;
     float m_far;
@@ -59,10 +69,15 @@ public:
     glm::mat4 getViewMatrix();
     glm::mat4 getViewMatrix(glm::vec3 worldOrigin);
     glm::mat4 getProjectionMatrix(float width, float height);
+    void calculateOrbit();
+    void setZoom(float zoom);
     void processInput(GLFWwindow *window, float deltaTime);
     void processKeyboard(Camera_Movement direction, float deltaTime);
     void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
     void updateFrustumPoints(float width, float height);
+    void setScrollCallback(GLFWwindow *window);
 };
 
 #endif /* camera_hpp */
+
+static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);

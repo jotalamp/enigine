@@ -122,6 +122,7 @@ int Enigine::init()
     CommonUtil::createQuad(q_vbo, q_vao, q_ebo);
 
     mainCamera = new Camera(glm::vec3(10.0f, 3.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //mainCamera->setScrollCallback(window);
     renderManager = new RenderManager(shaderManager, mainCamera, &cube, &quad, &icosahedron, q_vao);
     updateManager = new UpdateManager();
     inputManager = new InputManager(window);
